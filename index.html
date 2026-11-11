@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Little-Known Texas Markers</title>
+<meta name="theme-color" content="#4a2416">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="star">★</span> Little-Known Texas</div>
+  <div id="syncState" class="sync" title="Sync status"></div>
+</header>
+
+<main>
+  <section id="view-map" class="view active">
+    <div id="map"></div>
+    <div class="map-tools">
+      <button id="btnLocate" class="fab" title="Find me">◎</button>
+      <button id="btnLayers" class="fab" title="Layers">☰</button>
+    </div>
+    <div id="layerPanel" class="layer-panel hidden">
+      <label><input type="checkbox" id="lyrMarkers" checked> Historical markers</label>
+      <label><input type="checkbox" id="lyrCourthouses" checked> Courthouses <span class="muted">(zoom in to see)</span></label>
+      <label><input type="checkbox" id="lyrHideVisited"> Hide markers I've visited</label>
+      <label><input type="checkbox" id="lyrMystery"> Only Mystery markers (no text)</label>
+      <div class="legend"><span class="dot m"></span>Marker <span class="dot v"></span>Visited <span class="dot l"></span>Story lead <span class="dot w"></span>Want <span class="dot ch"></span>Courthouse</div>
+    </div>
+  </section>
+
+  <section id="view-near" class="view">
+    <div class="pad">
+      <div class="row between"><h2>Near me</h2><button id="btnRefreshNear" class="btn small">↻ Update</button></div>
+      <div class="chips" id="nearChips"></div>
+      <div id="nearStatus" class="muted"></div>
+      <ul id="nearList" class="list"></ul>
+    </div>
+  </section>
+
+  <section id="view-search" class="view">
+    <div class="pad">
+      <h2>Search</h2>
+      <input id="q" type="search" placeholder="Name, town, county, or marker number" autocomplete="off">
+      <select id="qCounty"><option value="">All counties</option></select>
+      <div class="chips" id="searchChips"></div>
+      <div id="searchStatus" class="muted"></div>
+      <ul id="searchList" class="list"></ul>
+    </div>
+  </section>
+
+  <section id="view-court" class="view">
+    <div class="pad">
+      <div class="row between"><h2>Courthouses</h2><span id="courtCount" class="pill"></span></div>
+      <input id="courtQ" type="search" placeholder="Find a county">
+      <div class="chips" id="courtChips"></div>
+      <ul id="courtList" class="list"></ul>
+    </div>
+  </section>
+
+  <section id="view-leads" class="view">
+    <div class="pad">
+      <div class="row between"><h2>Story leads</h2><button id="btnExport" class="btn small">⇩ Export</button></div>
+      <p class="muted">Everything you've flagged for Little-Known Texas.</p>
+      <ul id="leadList" class="list"></ul>
+      <h3>Want to visit</h3>
+      <ul id="wantList" class="list"></ul>
+    </div>
+  </section>
+
+  <section id="view-stats" class="view">
+    <div class="pad" id="statsBody"></div>
+  </section>
+</main>
+
+<nav class="tabbar">
+  <button data-view="map" class="active"><span>🗺</span>Map</button>
+  <button data-view="near"><span>◎</span>Near</button>
+  <button data-view="search"><span>⌕</span>Search</button>
+  <button data-view="court"><span>⚖</span>Courts</button>
+  <button data-view="leads"><span>✎</span>Leads</button>
+  <button data-view="stats"><span>★</span>Stats</button>
+</nav>
+
+<div id="sheet" class="sheet hidden" role="dialog" aria-modal="true">
+  <div class="sheet-inner">
+    <button id="sheetClose" class="close" aria-label="Close">✕</button>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<div id="login" class="login hidden">
+  <div class="login-card">
+    <div class="star big">★</div>
+    <h1>Little-Known Texas</h1>
+    <p class="muted">Sign in with your family Roper account so your visits, notes, and photos sync to every device.</p>
+    <input id="loginEmail" type="email" placeholder="Email" autocomplete="username">
+    <input id="loginPass" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="loginBtn" class="btn primary wide">Sign in</button>
+    <div id="loginMsg" class="muted"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
+<input id="photoPick" type="file" accept="image/*" multiple hidden>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
